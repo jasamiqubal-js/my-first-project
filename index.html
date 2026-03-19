@@ -1,10 +1,491 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My First Project</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1000 Daily Vocabulary — Jasam's Master Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg:#06060f; --surface:#0d0d1a; --card:rgba(255,255,255,0.04);
+  --gold:#ffc400; --txt:#dde1f0; --muted:rgba(221,225,240,0.42);
+  --line:rgba(255,255,255,0.07);
+  --basic:#4ade80; --basicg:rgba(74,222,128,0.1); --basicb:rgba(74,222,128,0.25);
+  --inter:#60a5fa;  --interg:rgba(96,165,250,0.1);  --interb:rgba(96,165,250,0.25);
+  --adv:#f472b6;   --advg:rgba(244,114,182,0.1);   --advb:rgba(244,114,182,0.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* orbs */
+.orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.28;animation:drift 20s ease-in-out infinite alternate}
+.o1{width:600px;height:600px;background:#ff5f2e;top:-15%;left:-10%;animation-delay:0s}
+.o2{width:450px;height:450px;background:#00d4ff;bottom:-10%;right:-5%;animation-delay:-7s}
+.o3{width:350px;height:350px;background:#00ff88;top:45%;left:42%;animation-delay:-14s;opacity:0.14}
+.o4{width:280px;height:280px;background:#bf7bff;top:15%;right:25%;animation-delay:-3s;opacity:0.18}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(50px,35px) scale(1.1)}}
+
+/* HEADER */
+header{
+  position:relative;z-index:10;padding:44px 24px 28px;
+  text-align:center;border-bottom:1px solid var(--line);
+  background:rgba(6,6,15,0.88);backdrop-filter:blur(18px);
+}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,196,0,0.1);border:1px solid rgba(255,196,0,0.25);
+  color:var(--gold);font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;
+  padding:5px 20px;border-radius:100px;margin-bottom:16px;
+}
+.eyebrow::before,.eyebrow::after{content:'◆';font-size:0.5rem;opacity:0.6}
+h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,9vw,6rem);
+  letter-spacing:4px;line-height:1;margin-bottom:8px;
+  background:linear-gradient(90deg,#ff5f2e,#ffc400,#00d4ff,#00ff88,#bf7bff,#ff5f2e);
+  background-size:400%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:hue 8s linear infinite;
+}
+@keyframes hue{0%{background-position:0%}100%{background-position:400%}}
+.sub{color:var(--muted);font-size:0.85rem;margin-bottom:8px}
+.totals{
+  display:inline-flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;
+}
+.tp{
+  background:rgba(255,255,255,0.05);border:1px solid var(--line);
+  border-radius:30px;padding:4px 14px;font-size:0.72rem;font-weight:600;
+}
+.tp.b{color:var(--basic);border-color:var(--basicb)}
+.tp.i{color:var(--inter);border-color:var(--interb)}
+.tp.a{color:var(--adv);border-color:var(--advb)}
+.tp.t{color:var(--gold);border-color:rgba(255,196,0,0.3)}
+
+/* CONTROLS */
+.controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+#si{
+  background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);
+  border-radius:12px;padding:10px 20px;color:var(--txt);
+  font-family:'Outfit',sans-serif;font-size:0.9rem;width:260px;outline:none;transition:all .2s;
+}
+#si:focus{border-color:var(--gold);background:rgba(255,196,0,0.05);box-shadow:0 0 22px rgba(255,196,0,0.12)}
+.fb{
+  font-family:'Outfit',sans-serif;font-size:0.78rem;font-weight:600;
+  padding:10px 18px;border-radius:12px;cursor:pointer;border:1.5px solid var(--line);
+  color:var(--muted);background:rgba(255,255,255,0.04);transition:all .18s;
+}
+.fb.on,.fb:hover{color:var(--gold);border-color:rgba(255,196,0,0.4);background:rgba(255,196,0,0.08)}
+.fb.on.basic,.fb.basic:hover{color:var(--basic);border-color:var(--basicb);background:var(--basicg)}
+.fb.on.inter,.fb.inter:hover{color:var(--inter);border-color:var(--interb);background:var(--interg)}
+.fb.on.adv,.fb.adv:hover{color:var(--adv);border-color:var(--advb);background:var(--advg)}
+
+/* STAT BAR */
+.statbar{
+  text-align:center;padding:10px;
+  color:var(--muted);font-size:0.78rem;position:relative;z-index:5;
+}
+.statbar strong{color:var(--gold)}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(175px,1fr));
+  gap:8px;padding:10px 14px 60px;
+  max-width:1440px;margin:0 auto;
+  position:relative;z-index:5;
+}
+.wc{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:13px 15px 11px;
+  transition:transform .15s,box-shadow .15s,border-color .15s,background .15s;
+  position:relative;overflow:hidden;cursor:default;
+}
+.wc::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2.5px;
+  transform:scaleX(0);transform-origin:left;transition:transform .22s;
+}
+.wc.basic::after{background:var(--basic)}
+.wc.inter::after{background:var(--inter)}
+.wc.adv::after{background:var(--adv)}
+
+.wc:hover{transform:translateY(-3px);background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.14)}
+.wc:hover::after{transform:scaleX(1)}
+.wc.basic:hover{box-shadow:0 6px 22px rgba(74,222,128,0.13)}
+.wc.inter:hover{box-shadow:0 6px 22px rgba(96,165,250,0.13)}
+.wc.adv:hover{box-shadow:0 6px 22px rgba(244,114,182,0.13)}
+
+.wn{font-size:0.58rem;color:rgba(255,255,255,0.18);margin-bottom:4px}
+.we{font-weight:700;font-size:0.95rem;margin-bottom:2px;color:var(--txt)}
+.wp{font-size:0.78rem;color:var(--gold);margin-bottom:2px;opacity:.9}
+.wm{font-size:0.76rem;color:var(--muted)}
+.badge{
+  display:inline-block;font-size:0.58rem;padding:2px 8px;
+  border-radius:20px;margin-top:6px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;
+}
+.badge.basic{background:rgba(74,222,128,0.1);color:var(--basic);border:1px solid rgba(74,222,128,0.25)}
+.badge.inter{background:rgba(96,165,250,0.1);color:var(--inter);border:1px solid rgba(96,165,250,0.25)}
+.badge.adv{background:rgba(244,114,182,0.1);color:var(--adv);border:1px solid rgba(244,114,182,0.25)}
+
+/* highlight on search */
+.wc.hl{border-color:var(--gold)!important;background:rgba(255,196,0,0.06)!important}
+.wc.dim{opacity:.1;pointer-events:none}
+
+.nores{grid-column:1/-1;text-align:center;color:var(--muted);padding:60px;font-size:.95rem;display:none}
+
+/* scrollbar */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#08081a}
+::-webkit-scrollbar-thumb{background:#1e1e38;border-radius:3px}
+
+@media(max-width:480px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:6px;padding:8px 8px 60px}
+}
+</style>
 </head>
 <body>
-    <h1>Hello GitHub! 🚀</h1>
-    <p>This is my first push by Jasami Qubal</p>
-</body>
-</html>
+
+<div class="orbs">
+  <div class="orb o1"></div><div class="orb o2"></div>
+  <div class="orb o3"></div><div class="orb o4"></div>
+</div>
+
+<header>
+  <div class="eyebrow">Jasam's English Master Guide</div>
+  <h1>1000 VOCABULARY</h1>
+  <p class="sub">Basic → Intermediate → Advanced • Daily Life + Education • Bangla উচ্চারণ সহ</p>
+  <div class="totals">
+    <span class="tp t">📚 Total: <strong id="totalAll">0</strong></span>
+    <span class="tp b">🟢 Basic: <strong id="totalB">0</strong></span>
+    <span class="tp i">🔵 Inter: <strong id="totalI">0</strong></span>
+    <span class="tp a">🔴 Adv: <strong id="totalA">0</strong></span>
+  </div>
+  <div class="controls">
+    <input type="text" id="si" placeholder="🔍 Search করো..." oninput="doFilter()">
+    <button class="fb on" onclick="setL('all',this)">⚡ All</button>
+    <button class="fb basic" onclick="setL('basic',this)">🟢 Basic</button>
+    <button class="fb inter" onclick="setL('inter',this)">🔵 Intermediate</button>
+    <button class="fb adv" onclick="setL('adv',this)">🔴 Advanced</button>
+  </div>
+</header>
+
+<div class="statbar">দেখাচ্ছে <strong id="cnt">0</strong> words</div>
+<div class="grid" id="grid">
+  <div class="nores" id="nores">কোনো word পাওয়া যায়নি 🙁</div>
+</div>
+
+<script>
+// [english, bangla-pronunciation, bangla-meaning, level]
+const W = [
+  // ===== BASIC =====
+  ["Water","ওয়াটার","পানি","basic"],
+  ["Food","ফুড","খাবার","basic"],
+  ["Home","হোম","বাড়ি","basic"],
+  ["House","হাউস","ঘর","basic"],
+  ["Family","ফ্যামিলি","পরিবার","basic"],
+  ["Friend","ফ্রেন্ড","বন্ধু","basic"],
+  ["School","স্কুল","বিদ্যালয়","basic"],
+  ["Teacher","টিচার","শিক্ষক","basic"],
+  ["Student","স্টুডেন্ট","ছাত্র/ছাত্রী","basic"],
+  ["Book","বুক","বই","basic"],
+  ["Pen","পেন","কলম","basic"],
+  ["Class","ক্লাস","শ্রেণী","basic"],
+  ["Schoolbag","স্কুলব্যাগ","স্কুল ব্যাগ","basic"],
+  ["Time","টাইম","সময়","basic"],
+  ["Day","ডে","দিন","basic"],
+  ["Night","নাইট","রাত","basic"],
+  ["Morning","মর্নিং","সকাল","basic"],
+  ["Evening","ইভনিং","সন্ধ্যা","basic"],
+  ["Sun","সান","সূর্য","basic"],
+  ["Moon","মুন","চাঁদ","basic"],
+  ["Star","স্টার","তারা","basic"],
+  ["Sky","স্কাই","আকাশ","basic"],
+  ["Rain","রেইন","বৃষ্টি","basic"],
+  ["Wind","উইন্ড","বাতাস","basic"],
+  ["Weather","ওয়েদার","আবহাওয়া","basic"],
+  ["Road","রোড","রাস্তা","basic"],
+  ["Street","স্ট্রিট","রাস্তা","basic"],
+  ["Car","কার","গাড়ি","basic"],
+  ["Bus","বাস","বাস","basic"],
+  ["Train","ট্রেন","ট্রেন","basic"],
+  ["Airplane","এয়ারপ্লেন","বিমান","basic"],
+  ["Market","মার্কেট","বাজার","basic"],
+  ["Shop","শপ","দোকান","basic"],
+  ["Money","মানি","টাকা","basic"],
+  ["Work","ওয়ার্ক","কাজ","basic"],
+  ["Job","জব","চাকরি","basic"],
+  ["Name","নেম","নাম","basic"],
+  ["Age","এইজ","বয়স","basic"],
+  ["Face","ফেস","মুখ","basic"],
+  ["Eye","আই","চোখ","basic"],
+  ["Hand","হ্যান্ড","হাত","basic"],
+  ["Leg","লেগ","পা","basic"],
+  ["Head","হেড","মাথা","basic"],
+  ["Heart","হার্ট","হৃদয়","basic"],
+  ["Rice","রাইস","ভাত","basic"],
+  ["Fruit","ফ্রুট","ফল","basic"],
+  ["Milk","মিল্ক","দুধ","basic"],
+  ["Bread","ব্রেড","রুটি","basic"],
+  ["Tea","টি","চা","basic"],
+  ["Happy","হ্যাপি","খুশি","basic"],
+  ["Sad","স্যাড","দুঃখিত","basic"],
+  ["Happiness","হ্যাপিনেস","সুখ","basic"],
+  ["Sadness","স্যাডনেস","দুঃখ","basic"],
+  ["Good","গুড","ভালো","basic"],
+  ["Bad","ব্যাড","খারাপ","basic"],
+  ["Big","বিগ","বড়","basic"],
+  ["Small","স্মল","ছোট","basic"],
+  ["Hot","হট","গরম","basic"],
+  ["Cold","কোল্ড","ঠান্ডা","basic"],
+  ["Fast","ফাস্ট","দ্রুত","basic"],
+  ["Slow","স্লো","ধীরে","basic"],
+  ["Clean","ক্লিন","পরিষ্কার","basic"],
+  ["Dirty","ডার্টি","নোংরা","basic"],
+  ["Open","ওপেন","খোলা","basic"],
+  ["Close","ক্লোজ","বন্ধ","basic"],
+  ["Give","গিভ","দেওয়া","basic"],
+  ["Take","টেক","নেওয়া","basic"],
+  ["Come","কাম","আসা","basic"],
+  ["Go","গো","যাওয়া","basic"],
+  ["See","সি","দেখা","basic"],
+  ["Hear","হিয়ার","শোনা","basic"],
+  ["Eat","ইট","খাওয়া","basic"],
+  ["Drink","ড্রিংক","পান করা","basic"],
+  ["Sleep","স্লিপ","ঘুমানো","basic"],
+  ["Walk","ওয়াক","হাঁটা","basic"],
+  ["Run","রান","দৌড়ানো","basic"],
+  ["Sit","সিট","বসা","basic"],
+  ["Stand","স্ট্যান্ড","দাঁড়ানো","basic"],
+  ["Speak","স্পিক","বলা","basic"],
+  ["Listen","লিসেন","শোনা","basic"],
+  ["Read","রিড","পড়া","basic"],
+  ["Write","রাইট","লেখা","basic"],
+  ["Play","প্লে","খেলা","basic"],
+  ["Buy","বাই","কেনা","basic"],
+  ["Sell","সেল","বিক্রি","basic"],
+  ["Help","হেল্প","সাহায্য","basic"],
+  ["Ask","আস্ক","জিজ্ঞেস করা","basic"],
+  ["Answer","আনসার","উত্তর","basic"],
+  ["Know","নো","জানা","basic"],
+  ["Think","থিংক","ভাবা","basic"],
+  ["Want","ওয়ান্ট","চাওয়া","basic"],
+  ["Need","নিড","দরকার","basic"],
+  ["Love","লাভ","ভালোবাসা","basic"],
+  ["Hate","হেট","ঘৃণা","basic"],
+  ["Try","ট্রাই","চেষ্টা করা","basic"],
+  ["Keep","কিপ","রাখা","basic"],
+  ["Look","লুক","দেখা","basic"],
+  ["Find","ফাইন্ড","খোঁজা","basic"],
+  ["Say","স্যে","বলা","basic"],
+  ["Tell","টেল","বলা","basic"],
+  ["Hold","হোল্ড","ধরে রাখা","basic"],
+  ["Call","কল","ডাক দেওয়া","basic"],
+  ["Talk","টক","কথা বলা","basic"],
+  ["Move","মুভ","চলা","basic"],
+  ["Show","শো","দেখানো","basic"],
+  ["Follow","ফলো","অনুসরণ করা","basic"],
+  ["Send","সেন্ড","পাঠানো","basic"],
+  ["Child","চাইল্ড","শিশু","basic"],
+  ["Mother","মাদার","মা","basic"],
+  ["Father","ফাদার","বাবা","basic"],
+  ["Brother","ব্রাদার","ভাই","basic"],
+  ["Sister","সিস্টার","বোন","basic"],
+  ["Room","রুম","কক্ষ","basic"],
+  ["Door","ডোর","দরজা","basic"],
+  ["Window","উইন্ডো","জানালা","basic"],
+  ["Table","টেবিল","টেবিল","basic"],
+  ["Chair","চেয়ার","চেয়ার","basic"],
+  ["Bed","বেড","বিছানা","basic"],
+  ["Bag","ব্যাগ","ব্যাগ","basic"],
+  ["Clothes","ক্লোদজ","কাপড়","basic"],
+  ["Shoe","শু","জুতো","basic"],
+  ["Phone","ফোন","ফোন","basic"],
+  ["Number","নাম্বার","সংখ্যা","basic"],
+  ["Color","কালার","রঙ","basic"],
+  ["Light","লাইট","আলো","basic"],
+  ["Dark","ডার্ক","অন্ধকার","basic"],
+  ["Fire","ফায়ার","আগুন","basic"],
+  ["Tree","ট্রি","গাছ","basic"],
+  ["Flower","ফ্লাওয়ার","ফুল","basic"],
+  ["River","রিভার","নদী","basic"],
+  ["Sea","সি","সমুদ্র","basic"],
+  ["Mountain","মাউন্টেন","পাহাড়","basic"],
+  ["Land","ল্যান্ড","জমি/ভূমি","basic"],
+  ["Animal","অ্যানিমেল","প্রাণী","basic"],
+  ["Bird","বার্ড","পাখি","basic"],
+  ["Fish","ফিশ","মাছ","basic"],
+  ["Dog","ডগ","কুকুর","basic"],
+  ["Cat","ক্যাট","বিড়াল","basic"],
+  ["Village","ভিলেজ","গ্রাম","basic"],
+  ["City","সিটি","শহর","basic"],
+  ["Country","কান্ট্রি","দেশ","basic"],
+  ["Hospital","হসপিটাল","হাসপাতাল","basic"],
+  ["Doctor","ডাক্তার","ডাক্তার","basic"],
+  ["Medicine","মেডিসিন","ওষুধ","basic"],
+  ["Holiday","হলিডে","ছুটি","basic"],
+  ["Test","টেস্ট","পরীক্ষা","basic"],
+  ["Exam","এক্সাম","পরীক্ষা","basic"],
+  ["Mark","মার্ক","নম্বর","basic"],
+  ["Pass","পাস","পাস করা","basic"],
+  ["Fail","ফেইল","ফেল করা","basic"],
+  ["Life","লাইফ","জীবন","basic"],
+  ["Truth","ট্রুথ","সত্য","basic"],
+  ["Lie","লাই","মিথ্যা","basic"],
+  ["Right","রাইট","সঠিক","basic"],
+  ["Wrong","রং","ভুল","basic"],
+  ["Easy","ইজি","সহজ","basic"],
+  ["Hard","হার্ড","কঠিন","basic"],
+  ["New","নিউ","নতুন","basic"],
+  ["Old","ওল্ড","পুরানো","basic"],
+  ["Free","ফ্রি","মুক্ত","basic"],
+  ["Busy","বিজি","ব্যস্ত","basic"],
+  ["Tired","টায়ার্ড","ক্লান্ত","basic"],
+  ["Hungry","হাংগ্রি","ক্ষুধার্ত","basic"],
+  ["Sick","সিক","অসুস্থ","basic"],
+  ["Healthy","হেলদি","সুস্থ","basic"],
+  ["Strong","স্ট্রং","শক্তিশালী","basic"],
+  ["Weak","উইক","দুর্বল","basic"],
+  ["Young","ইয়াং","তরুণ","basic"],
+  ["Tall","টল","লম্বা","basic"],
+  ["Short","শর্ট","খাটো","basic"],
+  ["Smile","স্মাইল","হাসি","basic"],
+  ["Cry","ক্রাই","কাঁদা","basic"],
+  ["Dream","ড্রিম","স্বপ্ন","basic"],
+  ["Hope","হোপ","আশা","basic"],
+  ["Fear","ফিয়ার","ভয়","basic"],
+  ["Anger","অ্যাঙ্গার","রাগ","basic"],
+  ["Screen","স্ক্রিন","পর্দা","basic"],
+  ["Computer","কম্পিউটার","কম্পিউটার","basic"],
+  ["Wait","ওয়েট","অপেক্ষা করা","basic"],
+  ["Watch","ওয়াচ","দেখা/পর্যবেক্ষণ","basic"],
+  ["Touch","টাচ","স্পর্শ করা","basic"],
+  ["Fill","ফিল","ভর্তি করা","basic"],
+  ["Push","পুশ","ঠেলা","basic"],
+  ["Save","সেভ","বাঁচানো","basic"],
+  ["Win","উইন","জেতা","basic"],
+  ["Wish","উইশ","কামনা করা","basic"],
+  ["Aim","এইম","লক্ষ্য করা","basic"],
+  ["Pay","পে","প্রদান করা","basic"],
+  ["Start","স্টার্ট","শুরু করা","basic"],
+  ["Stay","স্টে","থাকা","basic"],
+  ["Study","স্টাডি","অধ্যয়ন করা","basic"],
+  ["Turn","টার্ন","ঘুরানো","basic"],
+  ["Use","ইউস","ব্যবহার করা","basic"],
+  ["Live","লিভ","বাস করা","basic"],
+  ["Miss","মিস","মিস করা","basic"],
+  ["Leave","লিভ","ছেড়ে যাওয়া","basic"],
+  ["Break","ব্রেক","ভাঙা","basic"],
+  ["Bring","ব্রিং","আনা","basic"],
+  ["Build","বিল্ড","নির্মাণ করা","basic"],
+  ["Care","কেয়ার","যত্ন নেওয়া","basic"],
+  ["Carry","ক্যারি","বহন করা","basic"],
+  ["Catch","ক্যাচ","ধরা","basic"],
+  ["Choose","চুজ","নির্বাচন করা","basic"],
+  ["Clean","ক্লিন","পরিষ্কার করা","basic"],
+  ["Draw","ড্র","অঙ্কন করা","basic"],
+  ["Drive","ড্রাইভ","গাড়ি চালানো","basic"],
+  ["Feed","ফিড","খাওয়ানো","basic"],
+  ["Feel","ফিল","অনুভব করা","basic"],
+  ["Fight","ফাইট","লড়াই করা","basic"],
+  ["Form","ফর্ম","গঠন করা","basic"],
+  ["Gain","গেইন","অর্জন করা","basic"],
+  ["Grow","গ্রো","বৃদ্ধি পাওয়া","basic"],
+  ["Happen","হ্যাপেন","ঘটা","basic"],
+  ["Harm","হার্ম","ক্ষতি করা","basic"],
+  ["Hurt","হার্ট","ব্যথা দেওয়া","basic"],
+  ["Join","জয়েন","যুক্ত হওয়া","basic"],
+  ["Jump","জাম্প","লাফানো","basic"],
+  ["Lead","লিড","নেতৃত্ব দেওয়া","basic"],
+  ["Learn","লার্ন","শেখা","basic"],
+  ["Lose","লুজ","হারানো","basic"],
+  ["Make","মেক","তৈরি করা","basic"],
+  ["Rise","রাইজ","উঠা","basic"],
+  ["Search","সার্চ","খোঁজা","basic"],
+  ["Sign","সাইন","সই করা","basic"],
+  ["Sing","সিং","গান করা","basic"],
+  ["Teach","টিচ","শেখানো","basic"],
+  ["Throw","থ্রো","ছোঁড়া","basic"],
+
+  // ===== INTERMEDIATE =====
+  ["Journey","জার্নি","ভ্রমণ","inter"],
+  ["Adventure","অ্যাডভেঞ্চার","অভিযান","inter"],
+  ["Experience","এক্সপেরিয়েন্স","অভিজ্ঞতা","inter"],
+  ["Opportunity","অপরচুনিটি","সুযোগ","inter"],
+  ["Challenge","চ্যালেঞ্জ","চ্যালেঞ্জ","inter"],
+  ["Success","সাকসেস","সাফল্য","inter"],
+  ["Failure","ফেইলিউর","ব্যর্থতা","inter"],
+  ["Effort","এফোর্ট","প্রচেষ্টা","inter"],
+  ["Purpose","পার্পাস","উদ্দেশ্য","inter"],
+  ["Decision","ডিসিশন","সিদ্ধান্ত","inter"],
+  ["Solution","সলিউশন","সমাধান","inter"],
+  ["Problem","প্রব্লেম","সমস্যা","inter"],
+  ["Situation","সিচুয়েশন","পরিস্থিতি","inter"],
+  ["Result","রেজাল্ট","ফলাফল","inter"],
+  ["Progress","প্রোগ্রেস","অগ্রগতি","inter"],
+  ["Growth","গ্রোথ","বৃদ্ধি","inter"],
+  ["Change","চেঞ্জ","পরিবর্তন","inter"],
+  ["Advice","অ্যাডভাইস","পরামর্শ","inter"],
+  ["Trust","ট্রাস্ট","বিশ্বাস","inter"],
+  ["Respect","রেসপেক্ট","সম্মান","inter"],
+  ["Honest","অনেস্ট","সৎ","inter"],
+  ["Patient","পেশেন্ট","ধৈর্যশীল","inter"],
+  ["Confident","কনফিডেন্ট","আত্মবিশ্বাসী","inter"],
+  ["Serious","সিরিয়াস","গুরুত্বপূর্ণ","inter"],
+  ["Curious","কিউরিয়াস","কৌতূহলী","inter"],
+  ["Creative","ক্রিয়েটিভ","সৃজনশীল","inter"],
+  ["Responsible","রেসপন্সিবল","দায়িত্বশীল","inter"],
+  ["Independent","ইন্ডিপেন্ডেন্ট","স্বাধীন","inter"],
+  ["Intelligent","ইন্টেলিজেন্ট","বুদ্ধিমান","inter"],
+  ["Talented","ট্যালেন্টেড","প্রতিভাবান","inter"],
+  ["Skilled","স্কিলড","দক্ষ","inter"],
+  ["Qualified","কোয়ালিফাইড","যোগ্য","inter"],
+  ["Organized","অর্গানাইজড","সংগঠিত","inter"],
+  ["Focused","ফোকাসড","মনোযোগী","inter"],
+  ["Motivated","মোটিভেটেড","অনুপ্রাণিত","inter"],
+  ["Dedicated","ডেডিকেটেড","নিবেদিত","inter"],
+  ["Ambitious","অ্যাম্বিশাস","উচ্চাভিলাষী","inter"],
+  ["Productive","প্রোডাক্টিভ","উৎপাদনশীল","inter"],
+  ["Effective","ইফেক্টিভ","কার্যকর","inter"],
+  ["Efficient","ইফিশেন্ট","দক্ষ","inter"],
+  ["Flexible","ফ্লেক্সিবল","নমনীয়","inter"],
+  ["Available","অ্যাভেইলেবল","উপলব্ধ","inter"],
+  ["Important","ইম্পর্ট্যান্ট","গুরুত্বপূর্ণ","inter"],
+  ["Necessary","নেসেসারি","প্রয়োজনীয়","inter"],
+  ["Possible","পসিবল","সম্ভব","inter"],
+  ["Impossible","ইম্পসিবল","অসম্ভব","inter"],
+  ["Difficult","ডিফিকাল্ট","কঠিন","inter"],
+  ["Simple","সিম্পল","সহজ","inter"],
+  ["Common","কমন","সাধারণ","inter"],
+  ["Popular","পপুলার","জনপ্রিয়","inter"],
+  ["Famous","ফেমাস","বিখ্যাত","inter"],
+  ["Modern","মডার্ন","আধুনিক","inter"],
+  ["Traditional","ট্র্যাডিশনাল","ঐতিহ্যবাহী","inter"],
+  ["Natural","ন্যাচারাল","প্রাকৃতিক","inter"],
+  ["Digital","ডিজিটাল","ডিজিটাল","inter"],
+  ["Online","অনলাইন","অনলাইন","inter"],
+  ["Internet","ইন্টারনেট","ইন্টারনেট","inter"],
+  ["Website","ওয়েবসাইট","ওয়েবসাইট","inter"],
+  ["Software","সফটওয়্যার","সফটওয়্যার","inter"],
+  ["System","সিস্টেম","সিস্টেম","inter"],
+  ["Network","নেটওয়ার্ক","নেটওয়ার্ক","inter"],
+  ["Device","ডিভাইস","যন্ত্র","inter"],
+  ["Battery","ব্যাটারি","ব্যাটারি","inter"],
+  ["Password","পাসওয়ার্ড","পাসওয়ার্ড","inter"],
+  ["Message","মেসেজ","বার্তা","inter"],
+  ["Contact","কনট্যাক্ট","যোগাযোগ","inter"],
+  ["Meeting","মিটিং","সভা","inter"],
+  ["Schedule","স্কেডিউল","সময়সূচি","inter"],
+  ["Plan","প্ল্যান","পরিকল্পনা","inter"],
+  ["Goal","গোল","লক্ষ্য","inter"],
+  ["Target","টার্গেট","লক্ষ্যমাত্রা","inter"],
+  ["Project","প্রজেক্ট","প্রকল্প","inter"],
+  ["Task","টাস্ক","দায়িত্ব","inter"],
+  ["Report","রিপোর্ট","প্রতিবেদন","inter"],
+  ["Research","রিসার্চ","গবেষণা","inter"],
+  ["Information","ইনফরমেশন","তথ্য","inter"],
+  ["Knowledge","নলেজ","জ্ঞান","inter"],
+  ["Education","এডুকেশন","শিক্ষা","inter"],
+  ["Training","ট্রেনিং","প্রশিক্ষণ","inter"],
+  ["Certificate","সার্টিফিকেট","সনদ"
